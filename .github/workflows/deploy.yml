@@ -19,14 +19,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Find project files
+        id: find
+        run: |
+          if [ -f package.json ]; then
+            echo "dir=." >> $GITHUB_OUTPUT
+          elif [ -f chroniques-fiche-5e/package.json ]; then
+            echo "dir=chroniques-fiche-5e" >> $GITHUB_OUTPUT
+          else
+            find . -name "package.json" -not -path "*/node_modules/*" -type f
+            exit 1
+          fi
+      
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      
       - name: Install dependencies
+        working-directory: ${{ steps.find.outputs.dir }}
         run: npm install
+      
       - name: Build
+        working-directory: ${{ steps.find.outputs.dir }}
         run: npm run build
+      
+      - name: Move dist to root
+        run: |
+          if [ "${{ steps.find.outputs.dir }}" != "." ]; then
+            mv ${{ steps.find.outputs.dir }}/dist ./dist
+          fi
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
