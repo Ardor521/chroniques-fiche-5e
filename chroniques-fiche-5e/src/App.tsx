@@ -88,6 +88,7 @@ function App() {
         <button className="brand" onClick={() => setPage('fiche')} aria-label="Retour à la fiche">
           <span className="brand-mark"><Dices size={23} /></span>
           <span><strong>Chroniques</strong><small>Registre des aventuriers · 5e</small></span>
+          <span className="brand-sigil">from Ardor521</span>
         </button>
 
         <nav className="desktop-nav" aria-label="Sections de la fiche">
@@ -142,6 +143,9 @@ function App() {
           <button key={id} className={page === id ? 'active' : ''} onClick={() => setPage(id)}><Icon size={21} /><span>{short}</span></button>
         ))}
       </nav>
+      <footer className="app-footer">
+        <span className="footer-sigil">✦ from Ardor521 ✦</span>
+      </footer>
     </div>
   )
 }
